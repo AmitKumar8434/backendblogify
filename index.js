@@ -11,6 +11,18 @@ const path = require("path");
 
 dotenv.config();
 app.use(express.json());
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-COntrol-Allow-Headers",
+      "Origin,X-Requested-With,Content-Type,Accept,Authorization"
+    );
+    if (req.method === "OPTIONS") {
+      res.header("Access-Control-Allow-Methods", "PUT,PATCH,POST,DELETE,GET");
+      return res.status(200).json({});
+    }
+    next();
+  });
 app.use("/images",express.static(path.join(__dirname,"/images")))
 
 mongoose.connect(process.env.MONGO_URL, {
